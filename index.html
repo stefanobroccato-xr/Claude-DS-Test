@@ -560,10 +560,131 @@ const data = {
           screenshots: []
         }
       ]
+    },
+    {
+      id: "L2",
+      label: "Level 2",
+      description: "Component application — composizione guidata e ragionamento su componenti reali",
+      tests: [
+        {
+          id: "2.1",
+          label: "Test 2.1",
+          title: "Guided composition — Pagina di login",
+          description: "Comando: \"Devo costruire una pagina di login con: logo in alto, form con email e password, bottone submit primario, link 'Password dimenticata?' e un separatore visivo seguito da un bottone di login sociale. Dimmi quali componenti del DS useresti per ogni elemento, quale variante, e se ci sono regole specifiche. Se qualcosa non è coperto dal DS dimmelo esplicitamente.\"",
+          status: "pass",
+          meta: {
+            "Fonti lette": "Button.md · InputField.md · Divider.md · Header.md",
+            "Elementi analizzati": "7",
+            "Coperti dal DS": "5",
+            "Gap DS identificati": "2",
+            "Data esecuzione": "2026-07-04"
+          },
+          content: `
+<div class="notes-box" style="color:#86efac;background:#052e16;border-color:#166534;margin-bottom:20px">
+  Analisi basata su <code>Button.md</code>, <code>InputField.md</code>, <code>Divider.md</code>, <code>Header.md</code>. Ogni elemento mappato al componente DS corretto con variante e regole specifiche.
+</div>
+
+<div class="section-title">Mappa componenti — elemento per elemento</div>
+
+<table class="data-table" style="margin-bottom:28px">
+  <thead>
+    <tr>
+      <th>Elemento richiesto</th>
+      <th>Componente DS</th>
+      <th>Variante / Tipo</th>
+      <th>Regole specifiche</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Logo in alto</strong></td>
+      <td style="color:var(--warn)">⚠ Non coperto dal DS</td>
+      <td>—</td>
+      <td>Nessun componente Logo nel DS. Va gestito come asset immagine esterno. Vedere nota gap #1.</td>
+    </tr>
+    <tr>
+      <td><strong>Campo email</strong></td>
+      <td><code>InputField</code></td>
+      <td>Default (Label / Placeholder)</td>
+      <td>Label: "Email address" (noun phrase, non "Enter your email"). Segnare come required con asterisco (*). Placeholder: mostrare formato atteso, es. "name@company.com". Attivare stato <code>Error</code> su formato non valido.</td>
+    </tr>
+    <tr>
+      <td><strong>Campo password</strong></td>
+      <td><code>InputField</code></td>
+      <td>Default (Label / Placeholder)</td>
+      <td>Label: "Password". Segnare come required. Spacing verticale tra i due campi: <strong>16px fissi</strong> (constraint InputField). ⚠ Il DS non documenta esplicitamente un toggle show/hide per il campo password — vedere nota gap #2.</td>
+    </tr>
+    <tr>
+      <td><strong>Bottone submit primario</strong></td>
+      <td><code>Button</code></td>
+      <td><code>filled</code></td>
+      <td>Un solo <code>filled</code> per sezione — regola assoluta. Label: "Log in" o "Sign in" (verb-first, sentence case, max ~20 caratteri, no "Submit"). Nessuna punteggiatura.</td>
+    </tr>
+    <tr>
+      <td><strong>Link "Password dimenticata?"</strong></td>
+      <td style="color:var(--warn)">⚠ Parzialmente coperto</td>
+      <td>Stile tipografico <code>utilities/link-50</code></td>
+      <td>Il DS non ha un componente <code>Link</code> con stati interattivi definiti. La tipografia <code>utilities/link-50</code> (14px, Regular, underline) esiste nelle Foundations. In alternativa: <code>Button</code> variante <code>ghost</code> o <code>soft</code> se l'azione apre un flusso interno (reset password). Vedere nota gap #2.</td>
+    </tr>
+    <tr>
+      <td><strong>Separatore visivo</strong></td>
+      <td><code>Divider</code></td>
+      <td><code>Horizontal · Solid</code></td>
+      <td>Usare <code>Solid</code> perché separa due sezioni indipendenti (form credenziali vs login sociale). Se il separatore porta un label testuale "oppure" — il DS non documenta un Divider con label embedded: gestire esternamente con layout.</td>
+    </tr>
+    <tr>
+      <td><strong>Bottone login sociale</strong></td>
+      <td><code>Button</code></td>
+      <td><code>outline</code></td>
+      <td>Azione secondaria che supporta il flusso primario (il <code>filled</code> è già il submit). Label: "Continue with Google" — verb-first, sentence case, specifico. Non usare <code>filled</code>: ci sarebbe un secondo bottone primario nella stessa sezione, vietato dalle regole di gerarchia.</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="section-title">Regole di composizione trasversali</div>
+<div class="notes-box" style="margin-bottom:16px">
+  <strong>Gerarchia bottoni:</strong> nella stessa sezione esiste un solo <code>filled</code> (submit). Il bottone sociale deve essere <code>outline</code>. Non affiancare due <code>filled</code> — rimuove la gerarchia visiva e disoriente l'utente.<br><br>
+  <strong>Spacing form:</strong> <code>InputField</code> richiede 16px fissi tra i campi. Non variare.<br><br>
+  <strong>Copy:</strong> tutti i label dei campi in noun phrase, tutti i label dei bottoni verb-first sentence case, nessun articolo né punteggiatura.<br><br>
+  <strong>Header:</strong> <code>Header.md</code> dice esplicitamente <em>"Do NOT use [Header] on login or onboarding screens where the application context is not yet established"</em>. La pagina di login non monta l'Header del DS.
+</div>
+
+<div class="section-title" style="color:var(--warn)">⚠ Gap DS — elementi non coperti</div>
+<div class="notes-box" style="border-color:var(--warn);background:#1a1200;margin-bottom:12px">
+  <strong style="color:var(--warn)">Gap #1 — Logo / Brand asset</strong><br>
+  Non esiste un componente Logo nel DS. La pagina di login richiede un elemento brand che il sistema non definisce. Va gestito come asset immagine esterno (SVG/PNG), dimensioni e posizionamento da definire fuori dal DS.
+</div>
+<div class="notes-box" style="border-color:var(--warn);background:#1a1200;margin-bottom:12px">
+  <strong style="color:var(--warn)">Gap #2 — Link interattivo come componente</strong><br>
+  Il DS ha stili tipografici <code>utilities/link-*</code> ma non un componente <code>Link</code> con stati interattivi (hover, focus, visited, disabled) documentati. Per "Password dimenticata?" si può ricorrere a <code>Button ghost</code> o <code>soft</code> se l'azione apre un flusso interno — ma la semantica non è identica a un link. Questo è un gap reale della libreria per contesti form-based.
+</div>
+<div class="notes-box" style="border-color:var(--warn);background:#1a1200;margin-bottom:24px">
+  <strong style="color:var(--warn)">Gap #3 — InputField password (show/hide toggle)</strong><br>
+  <code>InputField.md</code> non documenta una variante specifica per campi password con toggle di visibilità (occhio). È una pattern attesa per il campo password ma non risulta esplicitamente nel DS. Prima di implementarla da zero, verificare se esiste come proprietà non documentata nel UI Kit Figma.
+</div>
+
+<div class="section-title">Layout consigliato</div>
+<div class="notes-box" style="font-size:12px;font-family:monospace;line-height:1.8">
+  [ Logo (asset) ]<br>
+  ─────────────────<br>
+  [ InputField — Email address * ]<br>
+  ↕ 16px<br>
+  [ InputField — Password * ]<br>
+  [ utilities/link-50 — "Password dimenticata?" ] ← allineato a destra del campo<br>
+  ↕ gap<br>
+  [ Button filled — "Log in" ] ← full width<br>
+  ↕ gap<br>
+  [ Divider Horizontal Solid ]<br>
+  ↕ gap<br>
+  [ Button outline — "Continue with Google" ] ← full width
+</div>
+`,
+          screenshots: []
+        }
+      ]
     }
   ]
 };
-// ─────────────────────────────────────────────
 
 let activeLevel = data.levels[0].id;
 let activeTabs = {}; // levelId → testId
