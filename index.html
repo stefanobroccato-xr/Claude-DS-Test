@@ -461,161 +461,14 @@ const data = {
   Tutti i token di colore letti da <code>tokens/03072026_tokens.json</code> via use_figma + Plugin API.<br>
   <strong>474 Primitives</strong> · <strong>500 semantici (1.colors)</strong> · <strong>67 color-map (6.color-map)</strong> = <strong>1041 token</strong> con valori hex risolti.
 </div>
-
-<div style="display:flex;gap:8px;margin:16px 0;flex-wrap:wrap" id="tok-tabs">
-  <button onclick="showTokTab('primitives')" class="tok-tab-btn active" id="ttb-primitives" style="padding:6px 14px;border-radius:6px;border:1px solid var(--border-active);background:var(--bg-active);color:var(--text-primary);cursor:pointer;font-size:12px;font-weight:600">Primitives (474)</button>
-  <button onclick="showTokTab('semantic')"   class="tok-tab-btn"        id="ttb-semantic"   style="padding:6px 14px;border-radius:6px;border:1px solid var(--border);background:var(--bg-card);color:var(--text-secondary);cursor:pointer;font-size:12px">1.colors — semantici (500)</button>
-  <button onclick="showTokTab('colormap')"   class="tok-tab-btn"        id="ttb-colormap"   style="padding:6px 14px;border-radius:6px;border:1px solid var(--border);background:var(--bg-card);color:var(--text-secondary);cursor:pointer;font-size:12px">6.color-map (67)</button>
+<div style="display:flex;gap:8px;margin:16px 0;flex-wrap:wrap">
+  <button onclick="showTokTab('primitives')" id="ttb-primitives" style="padding:6px 14px;border-radius:6px;border:1px solid var(--border-active);background:var(--bg-active);color:var(--text-primary);cursor:pointer;font-size:12px;font-weight:600">Primitives (474)</button>
+  <button onclick="showTokTab('semantic')"   id="ttb-semantic"   style="padding:6px 14px;border-radius:6px;border:1px solid var(--border);background:var(--bg-card);color:var(--text-secondary);cursor:pointer;font-size:12px">1.colors — semantici (500)</button>
+  <button onclick="showTokTab('colormap')"   id="ttb-colormap"   style="padding:6px 14px;border-radius:6px;border:1px solid var(--border);background:var(--bg-card);color:var(--text-secondary);cursor:pointer;font-size:12px">6.color-map (67)</button>
 </div>
-
 <div id="tok-pane-primitives"></div>
-<div id="tok-pane-semantic"   style="display:none"></div>
-<div id="tok-pane-colormap"   style="display:none"></div>
-
-<script>
-(function() {
-  function swatch(hex) {
-    if (!hex) return '<span style="color:#555">—</span>';
-    const bg = hex.startsWith('#') ? hex : hex;
-    const disp = hex.slice(0,7).toUpperCase();
-    return \`<span style="display:inline-flex;align-items:center;gap:5px"><span style="display:inline-block;width:13px;height:13px;background:\${bg};border-radius:3px;border:1px solid rgba(255,255,255,.12);flex-shrink:0"></span><code style="font-size:11px">\${disp}</code></span>\`;
-  }
-
-  function mainHex(modes) {
-    return modes.value || modes.light || modes.dark || Object.values(modes)[0] || null;
-  }
-
-  function contextFromName(name) {
-    const ctxMap = {
-      background: 'Sfondi componenti e pagine',
-      text:       'Colori testo e tipografia',
-      icon:       'Colori icone e simboli',
-      border:     'Bordi, outline e divider',
-      data:       'Visualizzazioni dati e chart',
-    };
-    const part = name.split('/')[0];
-    return ctxMap[part] || part;
-  }
-
-  function buildPrimitivesPane(groups) {
-    const catDesc = {
-      primary:    'Scala navy → dal più chiaro (50) al più scuro (700) · colore brand principale',
-      secondary:  'Scala blu scurissimo/nero · sfondo dark e superfici profonde',
-      grey:       'Scala grigi neutri · 15→700 da quasi-bianco a nero',
-      'accent-lightMode': 'Blu brillante per il tema light · CTA, link, focus',
-      'accent-darkMode':  'Blu brillante per il tema dark · CTA, link, focus',
-      'success-lightMode':'Verde lime · stati success in light mode',
-      'success-darkMode': 'Verde lime · stati success in dark mode',
-      'error-lightMode':  'Rosso · stati error in light mode',
-      'error-darkMode':   'Rosso · stati error in dark mode',
-      'critical-lightMode':'Rosso critico · warning critici in light',
-      'critical-darkMode': 'Rosso critico · warning critici in dark',
-      white:      'Bianco puro e varianti alpha (a1–a90)',
-      black:      'Nero puro e varianti alpha (a5–a80)',
-    };
-    let html = '<div class="section-title">Primitives — token raw (non usare direttamente nelle schermate)</div>';
-    html += '<div class="notes-box" style="margin-bottom:16px">I Primitives sono valori base. In Figma applicare sempre i token semantici <strong>1.colors</strong> o <strong>6.color-map</strong>.</div>';
-    for (const [cat, tokens] of Object.entries(groups)) {
-      const desc = catDesc[cat] || '';
-      html += \`<div class="section-title" style="margin-top:18px">\${cat} (\${tokens.length})\${desc ? ' <span style="font-weight:400;color:var(--text-secondary);font-size:11px">— ' + desc + '</span>' : ''}</div>\`;
-      html += '<div class="t-wrap"><table class="data-table"><thead><tr><th>Nome token</th><th>Hex</th></tr></thead><tbody>';
-      for (const t of tokens) {
-        const hex = mainHex(t.modes);
-        html += \`<tr><td style="font-family:monospace;font-size:11px">\${t.name}</td><td>\${swatch(hex)}</td></tr>\`;
-      }
-      html += '</tbody></table></div>';
-    }
-    return html;
-  }
-
-  function buildSemanticPane(groups) {
-    const catDesc = {
-      background: 'Sfondi — applicare a fill di frame, card, modal, pannelli',
-      text:       'Testo — applicare a fill di nodi TEXT',
-      icon:       'Icone — applicare a fill di vettori e icone SVG',
-      border:     'Bordi — applicare a stroke di frame e componenti',
-      data:       'Visualizzazioni dati — chart, gauge, KPI',
-    };
-    const stateDesc = {
-      default:  'Stato normale',
-      hover:    'Stato hover / puntamento',
-      selected: 'Stato selezionato / attivo',
-      disabled: 'Stato disabilitato',
-      ghost:    'Variante trasparente (alpha 0)',
-      pressed:  'Stato premuto / click',
-    };
-    let html = '<div class="section-title">1.colors — token semantici (USARE QUESTI IN FIGMA)</div>';
-    html += '<div class="notes-box" style="margin-bottom:16px;color:#86efac;background:#052e16;border-color:#166534">Questi token hanno <strong>light</strong> e <strong>dark</strong> mode. In Figma applicarli come variabili — si adattano automaticamente al tema.</div>';
-    for (const [cat, tokens] of Object.entries(groups)) {
-      const desc = catDesc[cat] || '';
-      html += \`<div class="section-title" style="margin-top:18px">\${cat} (\${tokens.length})\${desc ? ' <span style="font-weight:400;color:var(--text-secondary);font-size:11px">— ' + desc + '</span>' : ''}</div>\`;
-      html += '<div class="t-wrap"><table class="data-table"><thead><tr><th>Nome token</th><th>Light</th><th>Dark</th><th>Stato</th></tr></thead><tbody>';
-      for (const t of tokens) {
-        const name = t.name.replace(/^[^/]+\//, '');
-        const parts = name.split('/');
-        const stato = parts[parts.length - 1];
-        const ctx   = parts.slice(0, -1).join('/');
-        const stateLabel = stateDesc[stato] || stato;
-        html += \`<tr>
-          <td style="font-family:monospace;font-size:11px">\${name}</td>
-          <td>\${swatch(t.modes.light)}</td>
-          <td>\${swatch(t.modes.dark)}</td>
-          <td style="color:var(--text-secondary);font-size:11px">\${stateLabel}</td>
-        </tr>\`;
-      }
-      html += '</tbody></table></div>';
-    }
-    return html;
-  }
-
-  function buildColormapPane(groups) {
-    let html = '<div class="section-title">6.color-map — token per contesti specifici</div>';
-    html += '<div class="notes-box" style="margin-bottom:16px">Token con tre modalità: <strong>light</strong>, <strong>dark</strong>, <strong>satellite</strong> (mappa geospaziale). Usare per componenti contestuali come tooltip, waypoint, map overlay.</div>';
-    for (const [cat, tokens] of Object.entries(groups)) {
-      html += \`<div class="section-title" style="margin-top:18px">\${cat} (\${tokens.length})</div>\`;
-      html += '<div class="t-wrap"><table class="data-table"><thead><tr><th>Nome token</th><th>Light</th><th>Dark</th><th>Satellite</th></tr></thead><tbody>';
-      for (const t of tokens) {
-        const name = t.name.replace(/^[^/]+\/[^/]+\//, '');
-        html += \`<tr>
-          <td style="font-family:monospace;font-size:11px">\${name}</td>
-          <td>\${swatch(t.modes.light)}</td>
-          <td>\${swatch(t.modes.dark)}</td>
-          <td>\${swatch(t.modes.satellite)}</td>
-        </tr>\`;
-      }
-      html += '</tbody></table></div>';
-    }
-    return html;
-  }
-
-  function showTokTab(tab) {
-    ['primitives','semantic','colormap'].forEach(t => {
-      document.getElementById('tok-pane-' + t).style.display = t === tab ? '' : 'none';
-      const btn = document.getElementById('ttb-' + t);
-      btn.style.background = t === tab ? 'var(--bg-active)' : 'var(--bg-card)';
-      btn.style.borderColor = t === tab ? 'var(--border-active)' : 'var(--border)';
-      btn.style.color = t === tab ? 'var(--text-primary)' : 'var(--text-secondary)';
-      btn.style.fontWeight = t === tab ? '600' : '400';
-    });
-  }
-
-  window.showTokTab = showTokTab;
-
-  function init() {
-    if (!window.TOKEN_DATA) {
-      document.getElementById('tok-pane-primitives').innerHTML = '<div class="notes-box" style="color:#fbbf24">Token data non caricato — assicurati che token-data.js sia incluso.</div>';
-      return;
-    }
-    const d = window.TOKEN_DATA;
-    document.getElementById('tok-pane-primitives').innerHTML = buildPrimitivesPane(d.primitives);
-    document.getElementById('tok-pane-semantic').innerHTML   = buildSemanticPane(d.semantic);
-    document.getElementById('tok-pane-colormap').innerHTML   = buildColormapPane(d.colorMap);
-  }
-
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
-  else setTimeout(init, 100);
-})();
-<\/script>
+<div id="tok-pane-semantic" style="display:none"></div>
+<div id="tok-pane-colormap" style="display:none"></div>
 </div>`,
           screenshots: []
         }
@@ -761,7 +614,90 @@ function renderMain() {
 
   contentArea.innerHTML = html;
   main.appendChild(contentArea);
+
+  if (test.id === "1.2") initTokenMapping();
 }
+
+// ── Token Mapping renderer (Test 1.2) ────────────────────────────
+function tokSwatch(hex) {
+  if (!hex) return '<span style="color:#555">—</span>';
+  const disp = hex.slice(0,7).toUpperCase();
+  return `<span style="display:inline-flex;align-items:center;gap:5px"><span style="display:inline-block;width:13px;height:13px;background:${hex};border-radius:3px;border:1px solid rgba(255,255,255,.12);flex-shrink:0"></span><code style="font-size:11px">${disp}</code></span>`;
+}
+function tokMainHex(modes) { return modes.value || modes.light || modes.dark || Object.values(modes)[0] || null; }
+
+function buildPrimitivesPane(groups) {
+  const catDesc = { primary:'Scala navy — colore brand principale', secondary:'Scala blu/nero — sfondi dark', grey:'Scala grigi neutri (15→700)', 'accent-lightMode':'Blu brillante — CTA/focus in light mode', 'accent-darkMode':'Blu brillante — CTA/focus in dark mode', 'success-lightMode':'Verde lime — success light', 'success-darkMode':'Verde lime — success dark', 'error-lightMode':'Rosso — error light', 'error-darkMode':'Rosso — error dark', 'critical-lightMode':'Rosso critico — light', 'critical-darkMode':'Rosso critico — dark', white:'Bianco e varianti alpha', black:'Nero e varianti alpha' };
+  let html = '<div class="section-title">Primitives — token raw (non usare direttamente nelle schermate)</div>';
+  html += '<div class="notes-box" style="margin-bottom:16px">Valori base. In Figma usare sempre i token semantici <strong>1.colors</strong> o <strong>6.color-map</strong>.</div>';
+  for (const [cat, tokens] of Object.entries(groups)) {
+    const desc = catDesc[cat] || '';
+    html += `<div class="section-title" style="margin-top:18px">${cat} (${tokens.length})${desc ? ` <span style="font-weight:400;color:var(--text-secondary);font-size:11px">— ${desc}</span>` : ''}</div>`;
+    html += '<div class="t-wrap"><table class="data-table"><thead><tr><th>Nome token</th><th>Hex</th></tr></thead><tbody>';
+    for (const t of tokens) html += `<tr><td style="font-family:monospace;font-size:11px">${t.name}</td><td>${tokSwatch(tokMainHex(t.modes))}</td></tr>`;
+    html += '</tbody></table></div>';
+  }
+  return html;
+}
+
+function buildSemanticPane(groups) {
+  const catDesc = { background:'Sfondi — fill di frame, card, modal', text:'Testo — fill di nodi TEXT', icon:'Icone — fill di vettori SVG', border:'Bordi — stroke di frame e componenti', data:'Visualizzazioni dati — chart, gauge, KPI' };
+  const stateDesc = { default:'Stato normale', hover:'Hover', selected:'Selezionato/attivo', disabled:'Disabilitato', ghost:'Trasparente (alpha 0)', pressed:'Premuto/click' };
+  let html = '<div class="section-title">1.colors — token semantici (USARE QUESTI IN FIGMA)</div>';
+  html += '<div class="notes-box" style="margin-bottom:16px;color:#86efac;background:#052e16;border-color:#166534">Token con modalità <strong>light</strong> e <strong>dark</strong>. In Figma si adattano automaticamente al tema.</div>';
+  for (const [cat, tokens] of Object.entries(groups)) {
+    const desc = catDesc[cat] || '';
+    html += `<div class="section-title" style="margin-top:18px">${cat} (${tokens.length})${desc ? ` <span style="font-weight:400;color:var(--text-secondary);font-size:11px">— ${desc}</span>` : ''}</div>`;
+    html += '<div class="t-wrap"><table class="data-table"><thead><tr><th>Nome token</th><th>Light</th><th>Dark</th><th>Stato</th></tr></thead><tbody>';
+    for (const t of tokens) {
+      const name = t.name.replace(/^[^/]+\//, '');
+      const stato = name.split('/').pop();
+      html += `<tr><td style="font-family:monospace;font-size:11px">${name}</td><td>${tokSwatch(t.modes.light)}</td><td>${tokSwatch(t.modes.dark)}</td><td style="color:var(--text-secondary);font-size:11px">${stateDesc[stato]||stato}</td></tr>`;
+    }
+    html += '</tbody></table></div>';
+  }
+  return html;
+}
+
+function buildColormapPane(groups) {
+  let html = '<div class="section-title">6.color-map — token contestuali (light / dark / satellite)</div>';
+  html += '<div class="notes-box" style="margin-bottom:16px">Token con tre modalità: light, dark, satellite (mappa geospaziale).</div>';
+  for (const [cat, tokens] of Object.entries(groups)) {
+    html += `<div class="section-title" style="margin-top:18px">${cat} (${tokens.length})</div>`;
+    html += '<div class="t-wrap"><table class="data-table"><thead><tr><th>Nome token</th><th>Light</th><th>Dark</th><th>Satellite</th></tr></thead><tbody>';
+    for (const t of tokens) {
+      const name = t.name.replace(/^[^/]+\/[^/]+\//, '');
+      html += `<tr><td style="font-family:monospace;font-size:11px">${name}</td><td>${tokSwatch(t.modes.light)}</td><td>${tokSwatch(t.modes.dark)}</td><td>${tokSwatch(t.modes.satellite)}</td></tr>`;
+    }
+    html += '</tbody></table></div>';
+  }
+  return html;
+}
+
+function showTokTab(tab) {
+  ['primitives','semantic','colormap'].forEach(t => {
+    const pane = document.getElementById('tok-pane-' + t);
+    const btn  = document.getElementById('ttb-' + t);
+    if (!pane || !btn) return;
+    pane.style.display = t === tab ? '' : 'none';
+    btn.style.background  = t === tab ? 'var(--bg-active)' : 'var(--bg-card)';
+    btn.style.borderColor = t === tab ? 'var(--border-active)' : 'var(--border)';
+    btn.style.color       = t === tab ? 'var(--text-primary)' : 'var(--text-secondary)';
+    btn.style.fontWeight  = t === tab ? '600' : '400';
+  });
+}
+
+function initTokenMapping() {
+  if (!window.TOKEN_DATA) return;
+  const d = window.TOKEN_DATA;
+  const pp = document.getElementById('tok-pane-primitives');
+  const ps = document.getElementById('tok-pane-semantic');
+  const pc = document.getElementById('tok-pane-colormap');
+  if (pp) pp.innerHTML = buildPrimitivesPane(d.primitives);
+  if (ps) ps.innerHTML = buildSemanticPane(d.semantic);
+  if (pc) pc.innerHTML = buildColormapPane(d.colorMap);
+}
+// ─────────────────────────────────────────────────────────────────
 
 function render() {
   renderSidebar();
