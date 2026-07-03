@@ -471,6 +471,93 @@ const data = {
 <div id="tok-pane-colormap" style="display:none"></div>
 </div>`,
           screenshots: []
+        },
+        {
+          id: "1.3",
+          label: "Test 1.3",
+          title: "DS mapping — Scala tipografica",
+          description: "Comando: \"Descrivimi la scala tipografica del DS: per ogni stile dimmi nome, font family, dimensione, peso, line-height e quando usarlo. Poi dimmi: esiste uno stile che non dovresti mai usare per il body copy?\"",
+          status: "pass",
+          meta: {
+            "Fonte": "tokens/03072026_tokens.json — Typography-styles",
+            "Stili totali": "46",
+            "Famiglie": "PP Fraktion Sans · PP Fraktion Mono",
+            "Gruppi": "heading (3) · body-sans (14) · body-mono (22) · utilities (7)",
+            "Line-height Sans": "122%",
+            "Line-height Mono": "131%",
+            "Data esecuzione": "2026-07-04"
+          },
+          content: `
+<div class="notes-box" style="color:#86efac;background:#052e16;border-color:#166534;margin-bottom:20px">
+  46 stili letti da <code>tokens/03072026_tokens.json → Typography-styles</code>. Tutti i valori px e pesi risolti dalle Primitives.
+</div>
+
+<div class="section-title">Heading — PP Fraktion Sans · Semibold 560 · line-height 122%</div>
+<table class="data-table" style="margin-bottom:24px">
+  <thead><tr><th>Stile</th><th>px</th><th>Peso</th><th>Quando usarlo</th></tr></thead>
+  <tbody>
+    <tr><td><code>heading/100</code></td><td>16px</td><td>Semibold 560</td><td>Titoli di sezione, header card, label gerarchico principale</td></tr>
+    <tr><td><code>heading/150</code></td><td>28px</td><td>Semibold 560</td><td>Titoli di pannello, modal header</td></tr>
+    <tr><td><code>heading/200</code></td><td>32px</td><td>Semibold 560</td><td>Titolo pagina, intestazione principale dashboard</td></tr>
+  </tbody>
+</table>
+
+<div class="section-title">Body-Sans — PP Fraktion Sans · line-height 122%</div>
+<p style="color:var(--text-secondary);font-size:12px;margin-bottom:12px">Ogni dimensione ha tre varianti di peso: <strong>base</strong> (Light 300), <strong>-light</strong> (Thin 200), <strong>-strong</strong> (Medium 450). La tabella mostra solo le varianti base.</p>
+<table class="data-table" style="margin-bottom:8px">
+  <thead><tr><th>Stile base</th><th>px</th><th>Peso base</th><th>Varianti disponibili</th><th>Quando usarlo</th></tr></thead>
+  <tbody>
+    <tr><td><code>body-sans/15</code></td><td>10px</td><td>Light 300</td><td>base · strong</td><td>Micro-label, badge testo, tooltip compatto</td></tr>
+    <tr><td><code>body-sans/25</code></td><td>12px</td><td>Light 300</td><td>base · light · strong</td><td>Label secondarie, metadata, caption</td></tr>
+    <tr><td><code>body-sans/50</code></td><td>14px</td><td>Light 300</td><td>base · light · strong</td><td>Testo UI secondario, description breve</td></tr>
+    <tr><td><code>body-sans/100</code></td><td>16px</td><td>Light 300</td><td>base · light · strong</td><td><strong>Testo principale dell'interfaccia</strong> — body copy standard</td></tr>
+    <tr><td><code>body-sans/150</code></td><td>16px</td><td>Light 300</td><td>base · light · strong</td><td style="color:var(--warn)">⚠ Risolve a 16px identici a /100 su tutti i breakpoint — nessuna differenza dimensionale reale attualmente</td></tr>
+  </tbody>
+</table>
+<div class="notes-box" style="margin-bottom:24px;font-size:12px">
+  I pesi numerici: <strong>Thin 200</strong> · <strong>Light 300</strong> · <strong>Regular 390</strong> · <strong>Medium 450</strong> · <strong>Semibold 560</strong>
+</div>
+
+<div class="section-title">Body-Mono — PP Fraktion Mono · line-height 131%</div>
+<p style="color:var(--text-secondary);font-size:12px;margin-bottom:12px">Per dati numerici, coordinate, telemetria, valori tabulari. Non usare per prosa. Ogni dimensione ha varianti base / -light / -strong salvo /15.</p>
+<table class="data-table" style="margin-bottom:24px">
+  <thead><tr><th>Stile base</th><th>px</th><th>Peso base</th><th>Note</th><th>Quando usarlo</th></tr></thead>
+  <tbody>
+    <tr><td><code>body-mono/15</code></td><td>10px</td><td>Light 300</td><td style="color:var(--warn)">⚠ Usa <code>{Info.MonoFamilyInfo}</code> — ref. non standard</td><td>Non raccomandato in produzione</td></tr>
+    <tr><td><code>body-mono/25</code></td><td>12px</td><td>Light 300</td><td>—</td><td>Valori numerici piccoli, coordinate compatte</td></tr>
+    <tr><td><code>body-mono/50</code></td><td>14px</td><td>Light 300</td><td>—</td><td>Dati tabellari, valori di stato</td></tr>
+    <tr><td><code>body-mono/100</code></td><td>16px</td><td>Light 300</td><td>—</td><td>Lettura dati principale, coordinate, telemetria</td></tr>
+    <tr><td><code>body-mono/150</code></td><td>16px</td><td>Light 300</td><td>—</td><td>Dati enfatizzati</td></tr>
+    <tr><td><code>body-mono/175</code></td><td>20px</td><td>Light 300</td><td><code>-light</code> ha letterSpacing 3%</td><td>Valori KPI numerici medi</td></tr>
+    <tr><td><code>body-mono/200</code></td><td>28px</td><td>Light 300</td><td>—</td><td>Valori KPI grandi</td></tr>
+    <tr><td><code>body-mono/300</code></td><td>32px</td><td>Light 300</td><td>—</td><td>Valori hero, cifre prominenti dashboard</td></tr>
+  </tbody>
+</table>
+
+<div class="section-title">Utilities — PP Fraktion Sans · line-height 122%</div>
+<table class="data-table" style="margin-bottom:24px">
+  <thead><tr><th>Stile</th><th>px</th><th>Peso</th><th>Particolarità</th><th>Quando usarlo</th></tr></thead>
+  <tbody>
+    <tr><td><code>utilities/button-100</code></td><td>12px</td><td>Regular 390</td><td>—</td><td>Testo bottone</td></tr>
+    <tr><td><code>utilities/link-25</code></td><td>12px</td><td>Regular 390</td><td>Underline · letterSpacing 0%</td><td>Link compatto</td></tr>
+    <tr><td><code>utilities/link-50</code></td><td>14px</td><td>Regular 390</td><td>Underline</td><td>Link medio</td></tr>
+    <tr><td><code>utilities/link-100</code></td><td>14px</td><td>Regular 390</td><td>Underline</td><td>Link principale</td></tr>
+    <tr><td><code>utilities/KPI-title-100</code></td><td>16px</td><td>Regular 390</td><td>textCase UPPER</td><td>Label KPI standard</td></tr>
+    <tr><td><code>utilities/KPI-title-75</code></td><td>10px</td><td>Regular 390</td><td>textCase UPPER</td><td>Label KPI compatta</td></tr>
+    <tr><td><code>utilities/notification-number-100</code></td><td>10px</td><td>Regular 390</td><td style="color:var(--warn)">lineHeight auto · letterSpacing 0%</td><td>Badge numerico esclusivamente</td></tr>
+  </tbody>
+</table>
+
+<div class="section-title" style="color:var(--fail)">⚠ Stile da non usare mai per body copy</div>
+<div class="notes-box" style="border-color:var(--fail);background:#1a0a0a;margin-bottom:16px">
+  <strong style="color:var(--fail)">utilities/notification-number-100</strong> — È l'unico stile dell'intero sistema con <code>lineHeight: auto</code>. Per body copy il line-height auto rende il ritmo verticale imprevedibile e incomponibile con il resto della scala (tutto il DS usa valori espliciti: 122% o 131%). Inoltre: 10px, sotto qualsiasi soglia di leggibilità per testo corrente.
+</div>
+<div class="notes-box" style="border-color:var(--warn);background:#1a1200;font-size:12px">
+  <strong style="color:var(--warn)">Attenzione — varianti Thin (-light) a dimensioni piccole.</strong><br>
+  <code>body-sans/100-light</code> e <code>body-sans/150-light</code> (Thin 200, 16px) sono nominalmente body text ma il peso 200 su sfondi scuri come <code>background/primary</code> abbassa il contrasto sotto le soglie WCAG AA per testo di lettura continua. Usare solo per enfasi visiva puntuale, mai per prosa.
+</div>
+`,
+          screenshots: []
         }
       ]
     }
