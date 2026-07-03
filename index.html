@@ -190,6 +190,7 @@
     margin-bottom: 24px;
     gap: 16px;
   }
+  .test-label { font-size: 11px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; }
   .test-title { font-size: 20px; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 4px; }
   .test-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
   .badge {
@@ -345,7 +346,7 @@ const data = {
         {
           id: "1.1",
           label: "Test 1.1",
-          title: "Test 1.1 — Inventario file letti",
+          title: "Inventario file letti",
           description: "Verifica di cosa Claude ha effettivamente letto: file Figma analizzati e file .md nella cartella components/. Nessuna integrazione, nessuna inferenza — solo ciò che è stato letto.",
           status: "pass",
           meta: {
@@ -433,6 +434,67 @@ const data = {
     <tr><td>5</td><td>KeyboardInteraction.md</td><td>Focus ring obbligatorio; focus trap in Modal/Side Panel; Esc chiude sempre; Tab order Header→Sub-Header→Main→Footer; 9 shortcuts globali.</td></tr>
     <tr><td>6</td><td>Layout.md</td><td>Tre strutture (Focused Workspace, Progressive Inspection, Geo Context); spacing scale 4 livelli; gerarchia da spacing non da border.</td></tr>
     <tr><td>7</td><td>Navigation.md</td><td>Gerarchia 3 livelli; Header con 3 zone fisse; Sub-Header con Breadcrumb+Entity Info+timestamp; Tab/Switcher/Stepper non intercambiabili.</td></tr>
+  </tbody>
+</table>
+</div>
+`,
+          screenshots: []
+        },
+        {
+          id: "1.2",
+          label: "Test 1.2",
+          title: "DS mapping",
+          description: "Comando: \"Elencami tutti i token di colore nelle Foundations. Per ciascuno: nome esatto, valore esadecimale, contesto d'uso. Distingui token semantici da primitivi.\"",
+          status: "warn",
+          meta: {
+            "Metodo usato": "search_design_system",
+            "Query eseguite": "8 (in parallelo)",
+            "Token Foundations trovati": "4",
+            "Valori hex restituiti": "0",
+            "Data esecuzione": "2026-07-03"
+          },
+          content: `
+<div class="section-title">Risultato del comando</div>
+<div class="notes-box" style="color:#fbbf24;background:#1c1107;border-color:#92400e">⚠️ Risultato parziale — limitazione strutturale del tool MCP.<br><br>
+<strong>Cosa non ha funzionato:</strong> <code>search_design_system</code> esegue ricerche su tutte le librerie collegate all'account Figma, non solo su Foundations. La maggior parte dei risultati restituiti appartiene ad altre librerie (Accenture DS, GRiD Hackathon, Marketplace UI Kit, ecc.).<br><br>
+<strong>Valori hex:</strong> il tool non restituisce mai valori esadecimali. Restituisce solo nome token, chiave, collezione e scope. Per ottenere i valori hex è necessario <code>get_variable_defs</code> con un nodo selezionato nel canvas Figma — non disponibile via MCP senza selezione attiva.<br><br>
+<strong>Struttura confermata da get_metadata:</strong> le collezioni pubblicate da Foundations sono <code>Primitives</code>, <code>1.colors</code>, <code>4.spacing</code>, <code>6.color-map</code>.
+</div>
+
+<div class="section-title">Token identificati da Foundations (libraryKey confermata)</div>
+<div class="t-wrap">
+<table class="data-table">
+  <thead><tr><th>#</th><th>Nome token</th><th>Collezione</th><th>Valore hex</th><th>Contesto d'uso</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>border/utilities/divider</td><td>1.colors</td><td style="color:var(--text-muted)">n/d</td><td>Separatori e linee divisorie nell'interfaccia</td></tr>
+    <tr><td>2</td><td>data/utilities/band-chart-active</td><td>1.colors</td><td style="color:var(--text-muted)">n/d</td><td>Colore stato attivo nei band chart</td></tr>
+    <tr><td>3</td><td>data/utilities/band-chart-steering</td><td>1.colors</td><td style="color:var(--text-muted)">n/d</td><td>Colore steering nei band chart</td></tr>
+    <tr><td>4</td><td>data/utilities/band-chart-stationary</td><td>1.colors</td><td style="color:var(--text-muted)">n/d</td><td>Colore stationary nei band chart</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="section-title">Struttura collezioni pubblicata (da get_metadata)</div>
+<div class="t-wrap">
+<table class="data-table">
+  <thead><tr><th>Collezione</th><th>Tipo</th><th>Descrizione presunta</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Primitives</strong></td><td>Primitivi</td><td>Token raw — valori base di colore, spacing, radius. Es: gray-100, blue-500</td></tr>
+    <tr><td><strong>1.colors</strong></td><td>Semantici</td><td>Token semantici di colore. Es: background/*, text/*, icon/*, border/*, data/*</td></tr>
+    <tr><td><strong>4.spacing</strong></td><td>Spacing</td><td>Token di spaziatura e dimensionamento</td></tr>
+    <tr><td><strong>6.color-map</strong></td><td>Mapping</td><td>Mappa colori per contesti specifici (temi, varianti)</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="section-title">Limitazioni documentate</div>
+<div class="t-wrap">
+<table class="data-table">
+  <thead><tr><th>Limitazione</th><th>Causa</th><th>Workaround</th></tr></thead>
+  <tbody>
+    <tr><td>Token non filtrabili per libreria</td><td>search_design_system cerca su tutto lo workspace</td><td>Filtrare manualmente per libraryKey nella risposta</td></tr>
+    <tr><td>Valori hex non restituiti</td><td>Il tool restituisce solo metadati, non i valori</td><td>Usare get_variable_defs con nodo selezionato in Figma desktop</td></tr>
+    <tr><td>Lista token incompleta</td><td>Ricerca per keyword — non enumera tutti i token</td><td>Aprire il file Figma, selezionare un nodo, chiamare get_variable_defs</td></tr>
   </tbody>
 </table>
 </div>
@@ -549,6 +611,7 @@ function renderMain() {
   let html = `
     <div class="test-header">
       <div>
+        <div class="test-label">${test.label}</div>
         <div class="test-title">${test.title}</div>
         ${test.description ? `<div class="test-desc">${test.description}</div>` : ""}
       </div>
