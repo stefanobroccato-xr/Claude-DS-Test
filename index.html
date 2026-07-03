@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude DS Test Results</title>
+<style>
+  :root {
+    --bg: #0d0d0d;
+    --bg-card: #161616;
+    --bg-hover: #1f1f1f;
+    --bg-active: #2a2a2a;
+    --border: #2e2e2e;
+    --border-active: #555;
+    --text-primary: #f0f0f0;
+    --text-secondary: #888;
+    --text-muted: #555;
+    --accent: #e0e0e0;
+    --accent-dim: #3a3a3a;
+    --pass: #22c55e;
+    --fail: #ef4444;
+    --warn: #f59e0b;
+    --radius: 8px;
+    --radius-sm: 5px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text-primary);
+    font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", sans-serif;
+    font-size: 14px;
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  .header {
+    border-bottom: 1px solid var(--border);
+    padding: 20px 32px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .header-logo {
+    width: 28px; height: 28px;
+    background: var(--text-primary);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .header-logo svg { display: block; }
+  .header-title { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
+  .header-sub { font-size: 12px; color: var(--text-secondary); margin-left: auto; }
+
+  /* ── Layout ── */
+  .layout {
+    display: flex;
+    height: calc(100vh - 69px);
+  }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    width: 220px;
+    flex-shrink: 0;
+    border-right: 1px solid var(--border);
+    padding: 20px 0;
+    overflow-y: auto;
+  }
+  .sidebar-section-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 0 16px;
+    margin-bottom: 8px;
+  }
+  .level-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 9px 16px;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 13px;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.1s, color 0.1s;
+    border-radius: 0;
+  }
+  .level-btn:hover { background: var(--bg-hover); color: var(--text-primary); }
+  .level-btn.active { background: var(--bg-active); color: var(--text-primary); }
+  .level-btn .level-num {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--border);
+    font-size: 11px;
+    font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.1s;
+  }
+  .level-btn.active .level-num { background: var(--text-primary); color: var(--bg); }
+  .level-count {
+    margin-left: auto;
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  /* ── Main ── */
+  .main {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Test tabs ── */
+  .test-tabs-bar {
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    overflow-x: auto;
+    flex-shrink: 0;
+  }
+  .test-tab {
+    padding: 12px 14px 11px;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--text-secondary);
+    font-size: 13px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color 0.1s, border-color 0.1s;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .test-tab:hover { color: var(--text-primary); }
+  .test-tab.active { color: var(--text-primary); border-bottom-color: var(--text-primary); }
+  .status-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--text-muted);
+    flex-shrink: 0;
+  }
+  .status-dot.pass { background: var(--pass); }
+  .status-dot.fail { background: var(--fail); }
+  .status-dot.warn { background: var(--warn); }
+
+  /* ── Content ── */
+  .content-area {
+    flex: 1;
+    overflow-y: auto;
+    padding: 32px;
+  }
+
+  /* ── Empty state ── */
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    gap: 12px;
+    color: var(--text-muted);
+    text-align: center;
+  }
+  .empty-state-icon {
+    width: 48px; height: 48px;
+    border: 1.5px dashed var(--border);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 4px;
+  }
+  .empty-state-title { font-size: 14px; color: var(--text-secondary); }
+  .empty-state-sub { font-size: 12px; }
+
+  /* ── Test result card ── */
+  .test-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    gap: 16px;
+  }
+  .test-title { font-size: 20px; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 4px; }
+  .test-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+  .badge {
+    padding: 4px 10px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+  .badge.pass { background: #14532d; color: #4ade80; }
+  .badge.fail { background: #450a0a; color: #f87171; }
+  .badge.warn { background: #451a03; color: #fbbf24; }
+  .badge.pending { background: var(--bg-active); color: var(--text-secondary); }
+
+  .section-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+
+  .result-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .result-cell {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+  }
+  .result-cell-label { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
+  .result-cell-value { font-size: 14px; font-weight: 500; color: var(--text-primary); }
+
+  .notes-box {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    margin-bottom: 28px;
+    white-space: pre-wrap;
+  }
+
+  .screenshot-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .screenshot-placeholder {
+    background: var(--bg-card);
+    border: 1.5px dashed var(--border);
+    border-radius: var(--radius);
+    aspect-ratio: 16/10;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-muted);
+    font-size: 12px;
+    gap: 8px;
+  }
+  .screenshot-placeholder img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    border-radius: var(--radius);
+    display: none;
+  }
+
+  /* ── Add test button ── */
+  .add-test-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 14px 11px;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--text-muted);
+    font-size: 13px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color 0.1s;
+  }
+  .add-test-btn:hover { color: var(--text-secondary); }
+
+  /* ── Divider ── */
+  .divider { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+
+  /* hide inactive panels */
+  .level-panel { display: none; }
+  .level-panel.active { display: flex; flex-direction: column; height: 100%; }
+  .test-panel { display: none; }
+  .test-panel.active { display: block; }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-logo">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <rect x="2" y="2" width="5" height="5" rx="1" fill="#0d0d0d"/>
+      <rect x="9" y="2" width="5" height="5" rx="1" fill="#0d0d0d"/>
+      <rect x="2" y="9" width="5" height="5" rx="1" fill="#0d0d0d"/>
+      <rect x="9" y="9" width="5" height="5" rx="1" fill="#0d0d0d"/>
+    </svg>
+  </div>
+  <span class="header-title">Claude DS Test Results</span>
+  <span class="header-sub">Zenit AI — Design System</span>
+</header>
+
+<div class="layout">
+
+  <!-- Sidebar: levels -->
+  <nav class="sidebar">
+    <div class="sidebar-section-label">Levels</div>
+    <div id="level-nav"></div>
+  </nav>
+
+  <!-- Main area -->
+  <div class="main" id="main-area"></div>
+
+</div>
+
+<script>
+// ─────────────────────────────────────────────
+// DATA — add your test results here
+// ─────────────────────────────────────────────
+const data = {
+  levels: [
+    {
+      id: "L1",
+      label: "Level 1",
+      description: "Memory & knowledge verification",
+      tests: [
+        {
+          id: "1.1",
+          label: "Test 1.1",
+          title: "Test 1.1 — Inventario file letti",
+          description: "Verifica di cosa Claude ha effettivamente letto: file Figma analizzati e file .md nella cartella components/. Nessuna integrazione, nessuna inferenza — solo ciò che è stato letto.",
+          status: "pass",
+          meta: {
+            "File Figma letti": "2",
+            "File components/ letti": "44 (1 duplicato)",
+            "File patterns/ letti": "7",
+            "Totale file letti": "53",
+            "Data esecuzione": "2026-07-03"
+          },
+          notes: `FILE FIGMA ANALIZZATI
+──────────────────────────────────────────────
+
+1. Foundations — figma.com/design/klwWNFgwxq9vJpTPUPK8hi
+   Letto via get_metadata. Contiene una pagina "Release" (changelog). Pubblica token come variabili di libreria: collezioni Primitives, 1.colors, 4.spacing, 6.color-map. Versione 5.21.2 del 22.05.2026.
+
+2. UI Kit — figma.com/design/P2m9htIyyQEre0vKFDDt8s
+   Letto via get_metadata. Contiene una pagina "📋 Release" (changelog). Pubblica componenti come libreria. L'elenco componenti è stato ricostruito dal testo del changelog. Versione 5.21.1 del 22.05.2026.
+
+⚠️ Il file Vessel Dashboard (437X5XFXsxfEcawjuWy0Sg) NON è stato letto — è citato nel CLAUDE.md ma non sono state eseguite chiamate su di esso.
+
+
+FILE .MD LETTI IN components/
+──────────────────────────────────────────────
+
+1.  Accordion.md — Componente collassabile per raggruppare contenuti. Varianti Default / Inline / Card; badge obbligatorio se ha filtri attivi interni.
+2.  BadgeStatus.md — Indicatore visivo di stato entità. 6 livelli semantici (0–5); plain in tabelle, surface standalone; dot sempre presente.
+3.  Breadcrumb.md — Orientamento gerarchico nella navigazione. Sempre in zona left del Sub-Header; pagina corrente non cliccabile; complex oltre 4 livelli.
+4.  Button.md — CTA primaria. Varianti filled / outline / ghost / soft / alert / inverse; un solo filled per contesto; tooltip obbligatorio su icon button.
+5.  CardDataViz.md — Card contenitore per visualizzazioni dati. Valore gauge ≠ valore principale card; tipo trend coerente col tipo di valore.
+6.  Checkbox.md — Selezione multipla non esclusiva. Stato Intermediate per selezione parziale del parent; non usare per opzioni esclusive (→ Radio).
+7.  Chips.md — Etichette compatte su riga singola. Testo breve, singola riga; non usare per contenuti lunghi.
+8.  DatePicker.md — Selezione date con calendario. Formato DD/MM/YYYY; Apply disabilitato fino a selezione; non per date relative.
+9.  Divider.md — Separatore visivo. Solid per separazione forte, Dashed per raggruppamento sottile; usare con parsimonia.
+10. Donutchart.md — Grafico ad anello. Sempre con legenda; fette ordinate dal più grande al più piccolo; Nested mostra legenda per entrambi gli anelli.
+11. EmptyState.md — Stato vuoto quando il contenuto è caricato ma assente. Ogni container vuoto ne ha uno; non usare come stato di loading (→ Skeleton).
+12. Gantt.md — Diagramma di Gantt per timeline e dipendenze. Visualizzazione temporale di attività e dipendenze su asse orizzontale.
+13. Gauge.md — Indicatore a semicerchio per valori in un range. Variante Progress solo per valori operativi, non per task completion (→ ProgressBar).
+14. Gaugelinear.md — Indicatore lineare per singola metrica in soglie operative. Status indicator solo in condizioni di alert; varianti Simple / Complex.
+15. Header.md — Navigazione globale fissa in alto. Tre zone (global / product / support); 3 icone destra mai nascoste; mai dentro modal o overlay.
+16. InputCoordinates.md — Input per coordinate geografiche. Non mescolare sistemi di coordinate diversi nello stesso selettore.
+17. InputField.md — Campo di testo generico. Gap 16px tra campi; label noun phrase; asterisco + testo esplicito per campi obbligatori.
+18. InputNumericControl.md — Input numerico con controlli +/−. Label sempre obbligatoria; gap 16px.
+19. InputOTP.md — Input per codici OTP. Placeholder "–" non "0".
+20. InputSplit.md — Input con prefisso selezionabile. Non mescolare categorie di prefisso non correlate.
+21. Mapnavigation.md — Componente di navigazione su mappa geospaziale. Controlli per zoom, layer, orientamento integrati nella visualizzazione mappa.
+22. Modal.md — Dialog bloccante per azioni critiche. Mai modal dentro modal; Overlay sempre presente; small solo testo+azioni; button alert per distruttivo.
+23. PackedCircleChart.md — Grafico a cerchi raggruppati. Variante Compact sempre con tooltip; preferire Extra con descrizione.
+24. Pagination.md — Controllo paginazione tabelle. Sempre ancorato in fondo alla tabella; mai spostato verso l'alto; varianti standard o compact.
+25. Popover.md — Overlay contestuale non bloccante. Non mescolare navigazione e input nella stessa istanza; Default o Navigation, mai entrambi.
+26. ProgressBar.md — Barra di avanzamento percentuale task. Variante stacked sempre con ChartLegend; threshold solo se reale; non per valori operativi (→ Gauge).
+27. ProgressCircle.md — Cerchio di avanzamento per performance vs target. Solo per performance contro un obiettivo; non per task completion.
+28. Radiobutton.md — Selezione singola esclusiva. Min 2 opzioni; area cliccabile 32px; spacing 16px; non usare per selezione multipla (→ Checkbox).
+29. Search.md — Campo di ricerca. expanded = azione primaria; collapsed = secondaria/compatta; non per filtri strutturati (date, status).
+30. Skeleton.md — Placeholder strutturale durante il caricamento. Forma corrispondente al contenuto finale; non per load <200ms; in tabella Line=testo, Rectangle=azione.
+31. Slider.md — Controllo per selezionare valori in un range. Unità nel label superiore, mai nel campo valore; tipo Chart da posizionare sopra il chart.
+32. Snackbar.md — Notifica non bloccante per operazioni in background. Solo 2 frasi approvate per loading; info a 3s; centrato; non per errori (→ Toast/Modal).
+33. Stepper.md — Indicatore di step sequenziali in un flusso. Varianti Navigable / Sequential / Static; label orizzontale max 17 caratteri; non mescolare tipi.
+34. Sunburst.md — Grafico sunburst gerarchico. Token colore data-01-500→200 per livello; drill-down al click; label auto-nascoste su slice piccole.
+35. Switcher.md — Toggle tra viste dello stesso contenuto. Solo per cambiare rappresentazione, non per contenuti distinti (→ Tab); label noun 2-3 parole.
+36. Tab.md — Navigazione tra sezioni di contenuto distinte. Singola riga/colonna; counter cap +99; kebab solo su tab attiva; non per sequenze (→ Stepper).
+37. Table.md — Tabella dati strutturati. Pagination sempre in fondo; prima colonna fissa con scroll orizzontale; testo left / numeri right; no h-scroll + accordion insieme.
+38. Tag.md — Etichetta classificatoria. Varianti Filled / Outline — mai miste nello stesso contesto; stesso colore = stesso significato; max 15 caratteri.
+39. Text_area.md — Campo di testo multiriga. Solo per input multi-riga; gap 16px; limite caratteri con messaggio esplicito.
+40. ToastMessage.md — Notifica temporanea overlay. Top-right nella pagina; centrato dentro modal; auto-close 4s default; non per azioni critiche (→ Modal). FONTE DI VERITÀ.
+41. Toast_message.md — DUPLICATO di ToastMessage.md. Versione semplificata dello stesso componente. Ignorare.
+42. Toggle.md — Interruttore binario on/off. Solo per scelte binarie con effetto immediato; label se il contesto non è autoesplicativo; non per opzioni esclusive (→ Radio).
+43. Tooltip.md — Hint contestuale su hover o click. Sempre con icona che segnala la presenza di info aggiuntive; non basarsi solo su hover.
+44. Totalizer.md — KPI numerico riepilogativo. Sempre in gruppi di ≥2; non mescolare default e with-trend nello stesso gruppo; unità sempre presente.`,
+          screenshots: []
+        }
+      ]
+    }
+  ]
+};
+// ─────────────────────────────────────────────
+
+let activeLevel = data.levels[0].id;
+let activeTabs = {}; // levelId → testId
+
+// Init default active tabs
+data.levels.forEach(l => { activeTabs[l.id] = l.tests[0]?.id || null; });
+
+function statusLabel(s) {
+  return { pass: "Pass", fail: "Fail", warn: "Warning", pending: "Pending" }[s] || "Pending";
+}
+
+function renderSidebar() {
+  const nav = document.getElementById("level-nav");
+  nav.innerHTML = "";
+  data.levels.forEach(level => {
+    const total = level.tests.length;
+    const btn = document.createElement("button");
+    btn.className = "level-btn" + (level.id === activeLevel ? " active" : "");
+    btn.innerHTML = `
+      <span class="level-num">${level.id.replace("L","")}</span>
+      ${level.label}
+      <span class="level-count">${total}</span>
+    `;
+    btn.onclick = () => { activeLevel = level.id; render(); };
+    nav.appendChild(btn);
+  });
+}
+
+function renderMain() {
+  const main = document.getElementById("main-area");
+  main.innerHTML = "";
+
+  const level = data.levels.find(l => l.id === activeLevel);
+  if (!level) return;
+
+  const activeTest = activeTabs[level.id];
+
+  // Tabs bar
+  const tabsBar = document.createElement("div");
+  tabsBar.className = "test-tabs-bar";
+
+  level.tests.forEach(test => {
+    const tab = document.createElement("button");
+    tab.className = "test-tab" + (test.id === activeTest ? " active" : "");
+    const dot = document.createElement("span");
+    dot.className = "status-dot " + (test.status !== "pending" ? test.status : "");
+    tab.appendChild(dot);
+    tab.appendChild(document.createTextNode(test.label));
+    tab.onclick = () => { activeTabs[level.id] = test.id; render(); };
+    tabsBar.appendChild(tab);
+  });
+
+  main.appendChild(tabsBar);
+
+  // Content
+  const contentArea = document.createElement("div");
+  contentArea.className = "content-area";
+
+  const test = level.tests.find(t => t.id === activeTest);
+
+  if (!test) {
+    contentArea.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-state-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M10 6v4M10 14h.01" stroke="#555" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="10" cy="10" r="7.5" stroke="#555" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <span class="empty-state-title">No test selected</span>
+        <span class="empty-state-sub">Select a test from the tabs above</span>
+      </div>`;
+    main.appendChild(contentArea);
+    return;
+  }
+
+  // Test header
+  const hasContent = test.notes || Object.keys(test.meta).length > 0 || test.screenshots.length > 0;
+
+  if (!hasContent && test.status === "pending") {
+    contentArea.innerHTML = `
+      <div class="test-header">
+        <div>
+          <div class="test-title">${test.title}</div>
+          ${test.description ? `<div class="test-desc">${test.description}</div>` : ""}
+        </div>
+        <span class="badge ${test.status}">${statusLabel(test.status)}</span>
+      </div>
+      <div class="empty-state" style="height:calc(100% - 80px)">
+        <div class="empty-state-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M10 5v5l3 3" stroke="#555" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="10" cy="10" r="7.5" stroke="#555" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <span class="empty-state-title">Waiting for results</span>
+        <span class="empty-state-sub">This test hasn't been run yet</span>
+      </div>`;
+    main.appendChild(contentArea);
+    return;
+  }
+
+  let html = `
+    <div class="test-header">
+      <div>
+        <div class="test-title">${test.title}</div>
+        ${test.description ? `<div class="test-desc">${test.description}</div>` : ""}
+      </div>
+      <span class="badge ${test.status}">${statusLabel(test.status)}</span>
+    </div>
+  `;
+
+  if (Object.keys(test.meta).length > 0) {
+    html += `<div class="section-title">Details</div><div class="result-grid">`;
+    for (const [k, v] of Object.entries(test.meta)) {
+      html += `<div class="result-cell"><div class="result-cell-label">${k}</div><div class="result-cell-value">${v}</div></div>`;
+    }
+    html += `</div>`;
+  }
+
+  if (test.notes) {
+    html += `<div class="section-title">Notes</div><div class="notes-box">${test.notes}</div>`;
+  }
+
+  if (test.screenshots.length > 0) {
+    html += `<div class="section-title">Screenshots</div><div class="screenshot-grid">`;
+    test.screenshots.forEach(src => {
+      html += `<div class="screenshot-placeholder"><img src="${src}" alt="screenshot" onload="this.style.display='block';this.parentElement.querySelector('span') && (this.parentElement.querySelector('span').style.display='none')"/><span>Screenshot</span></div>`;
+    });
+    html += `</div>`;
+  }
+
+  contentArea.innerHTML = html;
+  main.appendChild(contentArea);
+}
+
+function render() {
+  renderSidebar();
+  renderMain();
+}
+
+render();
+</script>
+</body>
+</html>
