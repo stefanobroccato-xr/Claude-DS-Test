@@ -265,6 +265,17 @@
     display: none;
   }
 
+  /* ── Data tables ── */
+  .t-wrap { overflow-x: auto; margin-bottom: 28px; }
+  .data-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .data-table thead tr { background: #1e1e1e; }
+  .data-table th { padding: 8px 12px; text-align: left; font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid var(--border); white-space: nowrap; }
+  .data-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); color: var(--text-secondary); vertical-align: top; line-height: 1.6; }
+  .data-table td:first-child { color: var(--text-muted); width: 32px; font-size: 11px; }
+  .data-table td:nth-child(2) { color: var(--text-primary); font-size: 12px; white-space: nowrap; }
+  .data-table tbody tr:hover td { background: var(--bg-hover); }
+  .inline-note { font-size: 12px; color: #92400e; background: #1c1107; border: 1px solid #451a03; border-radius: var(--radius-sm); padding: 8px 12px; margin-bottom: 28px; }
+
   /* ── Add test button ── */
   .add-test-btn {
     display: flex;
@@ -344,65 +355,88 @@ const data = {
             "Totale file letti": "53",
             "Data esecuzione": "2026-07-03"
           },
-          notes: `FILE FIGMA ANALIZZATI
-──────────────────────────────────────────────
+          content: `
+<div class="section-title">File Figma analizzati</div>
+<div class="t-wrap">
+<table class="data-table">
+  <thead><tr><th>#</th><th>File</th><th>Posizione</th><th>Contenuto</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td><strong>Foundations</strong></td><td>figma.com/design/klwWNFgwxq9vJpTPUPK8hi</td><td>Letto via get_metadata. Pagina "Release" (changelog). Token pubblicati come variabili libreria: Primitives, 1.colors, 4.spacing, 6.color-map. Versione 5.21.2 del 22.05.2026.</td></tr>
+    <tr><td>2</td><td><strong>UI Kit</strong></td><td>figma.com/design/P2m9htIyyQEre0vKFDDt8s</td><td>Letto via get_metadata. Pagina "📋 Release" (changelog). Componenti pubblicati come libreria. Lista ricostruita dal changelog. Versione 5.21.1 del 22.05.2026.</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="inline-note">⚠️ Vessel Dashboard (437X5XFXsxfEcawjuWy0Sg) non letto — citato in CLAUDE.md ma nessuna chiamata eseguita su di esso.</div>
 
-1. Foundations — figma.com/design/klwWNFgwxq9vJpTPUPK8hi
-   Letto via get_metadata. Contiene una pagina "Release" (changelog). Pubblica token come variabili di libreria: collezioni Primitives, 1.colors, 4.spacing, 6.color-map. Versione 5.21.2 del 22.05.2026.
+<div class="section-title" style="margin-top:28px">File .md letti in components/</div>
+<div class="t-wrap">
+<table class="data-table">
+  <thead><tr><th>#</th><th>File</th><th>Contenuto</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>Accordion.md</td><td>Componente collassabile. Varianti Default / Inline / Card; badge obbligatorio se ha filtri attivi interni.</td></tr>
+    <tr><td>2</td><td>BadgeStatus.md</td><td>Indicatore visivo di stato. 6 livelli semantici (0–5); plain in tabelle, surface standalone; dot sempre presente.</td></tr>
+    <tr><td>3</td><td>Breadcrumb.md</td><td>Orientamento gerarchico. Sempre in zona left del Sub-Header; pagina corrente non cliccabile; complex oltre 4 livelli.</td></tr>
+    <tr><td>4</td><td>Button.md</td><td>CTA primaria. Varianti filled / outline / ghost / soft / alert / inverse; un solo filled per contesto; tooltip obbligatorio su icon button.</td></tr>
+    <tr><td>5</td><td>CardDataViz.md</td><td>Card per visualizzazioni dati. Valore gauge ≠ valore principale card; tipo trend coerente col tipo di valore.</td></tr>
+    <tr><td>6</td><td>Checkbox.md</td><td>Selezione multipla non esclusiva. Stato Intermediate per selezione parziale; non usare per opzioni esclusive (→ Radio).</td></tr>
+    <tr><td>7</td><td>Chips.md</td><td>Etichette compatte su riga singola. Testo breve; non usare per contenuti lunghi.</td></tr>
+    <tr><td>8</td><td>DatePicker.md</td><td>Selezione date. Formato DD/MM/YYYY; Apply disabilitato fino a selezione; non per date relative.</td></tr>
+    <tr><td>9</td><td>Divider.md</td><td>Separatore visivo. Solid = separazione forte; Dashed = raggruppamento sottile; usare con parsimonia.</td></tr>
+    <tr><td>10</td><td>Donutchart.md</td><td>Grafico ad anello. Sempre con legenda; fette dal più grande al più piccolo; Nested mostra legenda per entrambi gli anelli.</td></tr>
+    <tr><td>11</td><td>EmptyState.md</td><td>Stato vuoto post-caricamento. Ogni container vuoto ne ha uno; non usare come stato di loading (→ Skeleton).</td></tr>
+    <tr><td>12</td><td>Gantt.md</td><td>Timeline attività e dipendenze. Visualizzazione temporale su asse orizzontale.</td></tr>
+    <tr><td>13</td><td>Gauge.md</td><td>Indicatore semicircolare. Progress solo per valori operativi; non per task completion (→ ProgressBar).</td></tr>
+    <tr><td>14</td><td>Gaugelinear.md</td><td>Indicatore lineare per soglie operative. Status indicator solo in condizioni di alert; varianti Simple / Complex.</td></tr>
+    <tr><td>15</td><td>Header.md</td><td>Navigazione globale fissa. Tre zone; 3 icone destra mai nascoste; mai dentro modal o overlay.</td></tr>
+    <tr><td>16</td><td>InputCoordinates.md</td><td>Input coordinate geografiche. Non mescolare sistemi di coordinate nello stesso selettore.</td></tr>
+    <tr><td>17</td><td>InputField.md</td><td>Campo testo generico. Gap 16px tra campi; label noun phrase; asterisco + testo per campi obbligatori.</td></tr>
+    <tr><td>18</td><td>InputNumericControl.md</td><td>Input numerico con +/−. Label sempre obbligatoria; gap 16px.</td></tr>
+    <tr><td>19</td><td>InputOTP.md</td><td>Input codici OTP. Placeholder "–" non "0".</td></tr>
+    <tr><td>20</td><td>InputSplit.md</td><td>Input con prefisso selezionabile. Non mescolare categorie di prefisso non correlate.</td></tr>
+    <tr><td>21</td><td>Mapnavigation.md</td><td>Navigazione su mappa geospaziale. Controlli zoom, layer, orientamento integrati nella visualizzazione.</td></tr>
+    <tr><td>22</td><td>Modal.md</td><td>Dialog bloccante per azioni critiche. Mai modal in modal; Overlay sempre; small solo testo+azioni; alert per distruttivo.</td></tr>
+    <tr><td>23</td><td>PackedCircleChart.md</td><td>Grafico a cerchi raggruppati. Compact sempre con tooltip; preferire Extra con descrizione.</td></tr>
+    <tr><td>24</td><td>Pagination.md</td><td>Paginazione tabelle. Sempre in fondo; mai spostato verso l'alto; standard o compact.</td></tr>
+    <tr><td>25</td><td>Popover.md</td><td>Overlay contestuale non bloccante. Non mescolare nav e input; Default o Navigation, mai entrambi.</td></tr>
+    <tr><td>26</td><td>ProgressBar.md</td><td>Barra avanzamento task. Stacked sempre con ChartLegend; threshold solo se reale; non per valori operativi (→ Gauge).</td></tr>
+    <tr><td>27</td><td>ProgressCircle.md</td><td>Cerchio performance vs target. Solo per performance contro un obiettivo; non per task completion.</td></tr>
+    <tr><td>28</td><td>Radiobutton.md</td><td>Selezione singola esclusiva. Min 2 opzioni; area cliccabile 32px; non per selezione multipla (→ Checkbox).</td></tr>
+    <tr><td>29</td><td>Search.md</td><td>Campo di ricerca. expanded = primario; collapsed = compatto; non per filtri strutturati (date, status).</td></tr>
+    <tr><td>30</td><td>Skeleton.md</td><td>Placeholder durante caricamento. Forma = contenuto finale; non per load &lt;200ms; Line=testo, Rectangle=azione in tabella.</td></tr>
+    <tr><td>31</td><td>Slider.md</td><td>Selezione valore in range. Unità nel label superiore, mai nel campo valore; Chart sopra il chart.</td></tr>
+    <tr><td>32</td><td>Snackbar.md</td><td>Notifica background non bloccante. Solo 2 frasi per loading; 3s; centrato; non per errori (→ Toast/Modal).</td></tr>
+    <tr><td>33</td><td>Stepper.md</td><td>Step sequenziali in flusso. Navigable / Sequential / Static; label orizzontale max 17 caratteri; non mescolare tipi.</td></tr>
+    <tr><td>34</td><td>Sunburst.md</td><td>Grafico gerarchico. Token data-01-500→200 per livello; drill-down al click; label auto-nascoste su slice piccole.</td></tr>
+    <tr><td>35</td><td>Switcher.md</td><td>Toggle tra viste stesso contenuto. Solo per rappresentazione; non per contenuti distinti (→ Tab); label noun 2-3 parole.</td></tr>
+    <tr><td>36</td><td>Tab.md</td><td>Navigazione sezioni distinte. Singola riga/colonna; counter cap +99; kebab solo su tab attiva; non per sequenze (→ Stepper).</td></tr>
+    <tr><td>37</td><td>Table.md</td><td>Tabella dati. Pagination sempre in fondo; prima colonna fissa; testo left / numeri right; no h-scroll + accordion insieme.</td></tr>
+    <tr><td>38</td><td>Tag.md</td><td>Etichetta classificatoria. Filled / Outline — mai miste; stesso colore = stesso significato; max 15 caratteri.</td></tr>
+    <tr><td>39</td><td>Text_area.md</td><td>Campo testo multiriga. Solo per input multi-riga; gap 16px; limite caratteri con messaggio esplicito.</td></tr>
+    <tr><td>40</td><td>ToastMessage.md</td><td>Notifica overlay temporanea. Top-right in pagina; centrato in modal; auto-close 4s; non per azioni critiche (→ Modal). <strong>Fonte di verità.</strong></td></tr>
+    <tr><td>41</td><td>Toast_message.md</td><td><strong>Duplicato di ToastMessage.md.</strong> Versione semplificata dello stesso componente. Ignorare.</td></tr>
+    <tr><td>42</td><td>Toggle.md</td><td>Interruttore binario on/off. Solo per scelte binarie con effetto immediato; non per opzioni esclusive (→ Radio).</td></tr>
+    <tr><td>43</td><td>Tooltip.md</td><td>Hint contestuale su hover/click. Sempre con icona che segnala info aggiuntive; non basarsi solo su hover.</td></tr>
+    <tr><td>44</td><td>Totalizer.md</td><td>KPI numerico riepilogativo. Sempre in gruppi ≥2; non mescolare default e with-trend; unità sempre presente.</td></tr>
+  </tbody>
+</table>
+</div>
 
-2. UI Kit — figma.com/design/P2m9htIyyQEre0vKFDDt8s
-   Letto via get_metadata. Contiene una pagina "📋 Release" (changelog). Pubblica componenti come libreria. L'elenco componenti è stato ricostruito dal testo del changelog. Versione 5.21.1 del 22.05.2026.
-
-⚠️ Il file Vessel Dashboard (437X5XFXsxfEcawjuWy0Sg) NON è stato letto — è citato nel CLAUDE.md ma non sono state eseguite chiamate su di esso.
-
-
-FILE .MD LETTI IN components/
-──────────────────────────────────────────────
-
-1.  Accordion.md — Componente collassabile per raggruppare contenuti. Varianti Default / Inline / Card; badge obbligatorio se ha filtri attivi interni.
-2.  BadgeStatus.md — Indicatore visivo di stato entità. 6 livelli semantici (0–5); plain in tabelle, surface standalone; dot sempre presente.
-3.  Breadcrumb.md — Orientamento gerarchico nella navigazione. Sempre in zona left del Sub-Header; pagina corrente non cliccabile; complex oltre 4 livelli.
-4.  Button.md — CTA primaria. Varianti filled / outline / ghost / soft / alert / inverse; un solo filled per contesto; tooltip obbligatorio su icon button.
-5.  CardDataViz.md — Card contenitore per visualizzazioni dati. Valore gauge ≠ valore principale card; tipo trend coerente col tipo di valore.
-6.  Checkbox.md — Selezione multipla non esclusiva. Stato Intermediate per selezione parziale del parent; non usare per opzioni esclusive (→ Radio).
-7.  Chips.md — Etichette compatte su riga singola. Testo breve, singola riga; non usare per contenuti lunghi.
-8.  DatePicker.md — Selezione date con calendario. Formato DD/MM/YYYY; Apply disabilitato fino a selezione; non per date relative.
-9.  Divider.md — Separatore visivo. Solid per separazione forte, Dashed per raggruppamento sottile; usare con parsimonia.
-10. Donutchart.md — Grafico ad anello. Sempre con legenda; fette ordinate dal più grande al più piccolo; Nested mostra legenda per entrambi gli anelli.
-11. EmptyState.md — Stato vuoto quando il contenuto è caricato ma assente. Ogni container vuoto ne ha uno; non usare come stato di loading (→ Skeleton).
-12. Gantt.md — Diagramma di Gantt per timeline e dipendenze. Visualizzazione temporale di attività e dipendenze su asse orizzontale.
-13. Gauge.md — Indicatore a semicerchio per valori in un range. Variante Progress solo per valori operativi, non per task completion (→ ProgressBar).
-14. Gaugelinear.md — Indicatore lineare per singola metrica in soglie operative. Status indicator solo in condizioni di alert; varianti Simple / Complex.
-15. Header.md — Navigazione globale fissa in alto. Tre zone (global / product / support); 3 icone destra mai nascoste; mai dentro modal o overlay.
-16. InputCoordinates.md — Input per coordinate geografiche. Non mescolare sistemi di coordinate diversi nello stesso selettore.
-17. InputField.md — Campo di testo generico. Gap 16px tra campi; label noun phrase; asterisco + testo esplicito per campi obbligatori.
-18. InputNumericControl.md — Input numerico con controlli +/−. Label sempre obbligatoria; gap 16px.
-19. InputOTP.md — Input per codici OTP. Placeholder "–" non "0".
-20. InputSplit.md — Input con prefisso selezionabile. Non mescolare categorie di prefisso non correlate.
-21. Mapnavigation.md — Componente di navigazione su mappa geospaziale. Controlli per zoom, layer, orientamento integrati nella visualizzazione mappa.
-22. Modal.md — Dialog bloccante per azioni critiche. Mai modal dentro modal; Overlay sempre presente; small solo testo+azioni; button alert per distruttivo.
-23. PackedCircleChart.md — Grafico a cerchi raggruppati. Variante Compact sempre con tooltip; preferire Extra con descrizione.
-24. Pagination.md — Controllo paginazione tabelle. Sempre ancorato in fondo alla tabella; mai spostato verso l'alto; varianti standard o compact.
-25. Popover.md — Overlay contestuale non bloccante. Non mescolare navigazione e input nella stessa istanza; Default o Navigation, mai entrambi.
-26. ProgressBar.md — Barra di avanzamento percentuale task. Variante stacked sempre con ChartLegend; threshold solo se reale; non per valori operativi (→ Gauge).
-27. ProgressCircle.md — Cerchio di avanzamento per performance vs target. Solo per performance contro un obiettivo; non per task completion.
-28. Radiobutton.md — Selezione singola esclusiva. Min 2 opzioni; area cliccabile 32px; spacing 16px; non usare per selezione multipla (→ Checkbox).
-29. Search.md — Campo di ricerca. expanded = azione primaria; collapsed = secondaria/compatta; non per filtri strutturati (date, status).
-30. Skeleton.md — Placeholder strutturale durante il caricamento. Forma corrispondente al contenuto finale; non per load <200ms; in tabella Line=testo, Rectangle=azione.
-31. Slider.md — Controllo per selezionare valori in un range. Unità nel label superiore, mai nel campo valore; tipo Chart da posizionare sopra il chart.
-32. Snackbar.md — Notifica non bloccante per operazioni in background. Solo 2 frasi approvate per loading; info a 3s; centrato; non per errori (→ Toast/Modal).
-33. Stepper.md — Indicatore di step sequenziali in un flusso. Varianti Navigable / Sequential / Static; label orizzontale max 17 caratteri; non mescolare tipi.
-34. Sunburst.md — Grafico sunburst gerarchico. Token colore data-01-500→200 per livello; drill-down al click; label auto-nascoste su slice piccole.
-35. Switcher.md — Toggle tra viste dello stesso contenuto. Solo per cambiare rappresentazione, non per contenuti distinti (→ Tab); label noun 2-3 parole.
-36. Tab.md — Navigazione tra sezioni di contenuto distinte. Singola riga/colonna; counter cap +99; kebab solo su tab attiva; non per sequenze (→ Stepper).
-37. Table.md — Tabella dati strutturati. Pagination sempre in fondo; prima colonna fissa con scroll orizzontale; testo left / numeri right; no h-scroll + accordion insieme.
-38. Tag.md — Etichetta classificatoria. Varianti Filled / Outline — mai miste nello stesso contesto; stesso colore = stesso significato; max 15 caratteri.
-39. Text_area.md — Campo di testo multiriga. Solo per input multi-riga; gap 16px; limite caratteri con messaggio esplicito.
-40. ToastMessage.md — Notifica temporanea overlay. Top-right nella pagina; centrato dentro modal; auto-close 4s default; non per azioni critiche (→ Modal). FONTE DI VERITÀ.
-41. Toast_message.md — DUPLICATO di ToastMessage.md. Versione semplificata dello stesso componente. Ignorare.
-42. Toggle.md — Interruttore binario on/off. Solo per scelte binarie con effetto immediato; label se il contesto non è autoesplicativo; non per opzioni esclusive (→ Radio).
-43. Tooltip.md — Hint contestuale su hover o click. Sempre con icona che segnala la presenza di info aggiuntive; non basarsi solo su hover.
-44. Totalizer.md — KPI numerico riepilogativo. Sempre in gruppi di ≥2; non mescolare default e with-trend nello stesso gruppo; unità sempre presente.`,
+<div class="section-title" style="margin-top:28px">File .md letti in patterns/</div>
+<div class="t-wrap">
+<table class="data-table">
+  <thead><tr><th>#</th><th>File</th><th>Contenuto</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>Actions.md</td><td>Gerarchia azioni Global / Contextual / Local; posizionamento in Modal e Side Panel; bulk actions e azioni distruttive.</td></tr>
+    <tr><td>2</td><td>FeedbackAndStatus.md</td><td>Sistema feedback: loading (Skeleton/Snackbar), notifiche globali (Toast/Modal), feedback contestuale (EmptyState/BadgeStatus). Auto-dismiss 5–7s.</td></tr>
+    <tr><td>3</td><td>FilteringAndSearch.md</td><td>Tre modalità: Contextual Search (real-time, max 2 campi), Inline Filters (&lt;5, stessa cat.), Side Panel (≥5 cat. miste, Reset+Confirm).</td></tr>
+    <tr><td>4</td><td>HelpAndSupport.md</td><td>Tre livelli: Micro (Tooltip, Inline Info, Smart Tips), Guided (Wizard, Task Helper), Reference (manuali, FAQ, video).</td></tr>
+    <tr><td>5</td><td>KeyboardInteraction.md</td><td>Focus ring obbligatorio; focus trap in Modal/Side Panel; Esc chiude sempre; Tab order Header→Sub-Header→Main→Footer; 9 shortcuts globali.</td></tr>
+    <tr><td>6</td><td>Layout.md</td><td>Tre strutture (Focused Workspace, Progressive Inspection, Geo Context); spacing scale 4 livelli; gerarchia da spacing non da border.</td></tr>
+    <tr><td>7</td><td>Navigation.md</td><td>Gerarchia 3 livelli; Header con 3 zone fisse; Sub-Header con Breadcrumb+Entity Info+timestamp; Tab/Switcher/Stepper non intercambiabili.</td></tr>
+  </tbody>
+</table>
+</div>
+`,
           screenshots: []
         }
       ]
@@ -530,7 +564,9 @@ function renderMain() {
     html += `</div>`;
   }
 
-  if (test.notes) {
+  if (test.content) {
+    html += test.content;
+  } else if (test.notes) {
     html += `<div class="section-title">Notes</div><div class="notes-box">${test.notes}</div>`;
   }
 
