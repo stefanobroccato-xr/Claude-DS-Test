@@ -680,6 +680,118 @@ const data = {
 </div>
 `,
           screenshots: []
+        },
+        {
+          id: "2.2",
+          label: "Test 2.2",
+          title: "Component analysis — Fase 2 inspection",
+          description: "Ispezione sistematica di tutti i component set pubblicati nell'UI Kit tramite importComponentSetByKeyAsync. Obiettivo: mappare chiavi, variant properties, text node names, e rilevare anomalie prima dell'uso in produzione.",
+          status: "warn",
+          meta: {
+            "Component set ispezionati": "35",
+            "Componenti con chiave verificata": "28",
+            "Warning critici": "4",
+            "Componenti non trovati": "2",
+            "Data esecuzione": "2026-07-06"
+          },
+          content: `
+<div class="notes-box" style="color:#86efac;background:#052e16;border-color:#166534;margin-bottom:20px">
+  Ispezione live via <code>importComponentSetByKeyAsync</code> + <code>variantGroupProperties</code>. Copertura: Actions, Form &amp; Input, Feedback, Container &amp; Layout, Navigation, Data Visualization. Tutti i dati sono in <code>memory/component-keys-variants.md</code>.
+</div>
+
+<div class="section-title">Componenti analizzati</div>
+
+<table class="data-table" style="margin-bottom:28px">
+  <thead>
+    <tr>
+      <th>Componente</th>
+      <th>Categoria</th>
+      <th>Varianti</th>
+      <th>Proprietà chiave</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>Button</strong></td><td>Actions</td><td>165</td><td>Type · State · Size · Semantic · Loading</td></tr>
+    <tr><td><strong>Icon Button</strong></td><td>Actions</td><td>330</td><td>Type · State · Size · Semantic · Shape</td></tr>
+    <tr><td><strong>Toggle Button</strong></td><td>Actions</td><td>15</td><td>State · Size</td></tr>
+    <tr><td><strong>Slider</strong></td><td>Actions</td><td>6</td><td>Type · Percentage</td></tr>
+    <tr><td><strong>Pagination</strong></td><td>Actions</td><td>2</td><td>Type[Standard/Compact]</td></tr>
+    <tr><td><strong>Input field</strong></td><td>Form &amp; Input</td><td>12</td><td>State · Text insert[Yes/No]</td></tr>
+    <tr><td><strong>Select</strong></td><td>Form &amp; Input</td><td>18</td><td>Type · State · Style</td></tr>
+    <tr><td><strong>Input Numeric Control</strong></td><td>Form &amp; Input</td><td>6</td><td>Buttons Layout · State</td></tr>
+    <tr><td><strong>Input OTP Desktop</strong></td><td>Form &amp; Input</td><td>—</td><td>Chiave verificata</td></tr>
+    <tr><td><strong>Input OTP Mobile</strong></td><td>Form &amp; Input</td><td>—</td><td>Set separato per dispositivo</td></tr>
+    <tr><td><strong>Date Input</strong></td><td>Form &amp; Input</td><td>—</td><td>Chiave verificata</td></tr>
+    <tr><td><strong>Checkbox</strong></td><td>Form &amp; Input</td><td>30</td><td>State · Selection · Position</td></tr>
+    <tr><td><strong>Toggle</strong></td><td>Form &amp; Input</td><td>12</td><td>Toggle · State · Label position</td></tr>
+    <tr><td><strong>Radio button</strong></td><td>Form &amp; Input</td><td>20</td><td>State · Selection · Position</td></tr>
+    <tr><td><strong>Badge status</strong></td><td>Feedback</td><td>96</td><td>Status · Background · Alert[0–5] · Size · Position</td></tr>
+    <tr><td><strong>Toast</strong></td><td>Feedback</td><td>4</td><td>Type[Info/Alert/Warning/Success]</td></tr>
+    <tr><td><strong>Tag</strong></td><td>Feedback</td><td>24</td><td>Type · Style[00–05] · Size</td></tr>
+    <tr><td><strong>Progress Bar</strong></td><td>Feedback</td><td>6</td><td>Type[Fluid/0%/25%/50%/75%/100%]</td></tr>
+    <tr><td><strong>Progress circle</strong></td><td>Feedback</td><td>3</td><td>Type · Size</td></tr>
+    <tr><td><strong>Modal Desktop</strong></td><td>Container &amp; Layout</td><td>4</td><td>Size[Compact/Standard/Extra/Fullscreen]</td></tr>
+    <tr><td><strong>Modal Mobile</strong></td><td>Container &amp; Layout</td><td>—</td><td>Set separato per dispositivo</td></tr>
+    <tr><td><strong>Accordion Desktop</strong></td><td>Container &amp; Layout</td><td>10</td><td>Type · State · Expanded</td></tr>
+    <tr><td><strong>Accordion Tablet/Mobile</strong></td><td>Container &amp; Layout</td><td>—</td><td>Set separato per dispositivo</td></tr>
+    <tr><td><strong>Divider horizontal</strong></td><td>Container &amp; Layout</td><td>6</td><td>Style[Solid/Dash] · Weight</td></tr>
+    <tr><td><strong>Divider vertical</strong></td><td>Container &amp; Layout</td><td>6</td><td>Style · Weight</td></tr>
+    <tr><td><strong>Horizontal Stepper</strong></td><td>Container &amp; Layout</td><td>4</td><td>Size · Show Label</td></tr>
+    <tr><td><strong>Vertical Stepper</strong></td><td>Container &amp; Layout</td><td>4</td><td>Size · Show Label</td></tr>
+    <tr><td><strong>Tab</strong></td><td>Navigation</td><td>8</td><td>Layout · Arrow</td></tr>
+    <tr><td><strong>Breadcrumb</strong></td><td>Navigation</td><td>2</td><td>Type[Simple/Complex]</td></tr>
+    <tr><td><strong>Switcher</strong></td><td>Navigation</td><td>2</td><td>Size[Standard/Compact]</td></tr>
+    <tr><td><strong>Gauge</strong></td><td>Data Visualization</td><td>9</td><td>Type[Progress/Step Treshold/Linear Treshold] · Size</td></tr>
+    <tr><td><strong>Linear Gauge</strong></td><td>Data Visualization</td><td>2</td><td>Threshold Type[Discrete/Continuous]</td></tr>
+    <tr><td><strong>Totalizer Text</strong></td><td>Data Visualization</td><td>2</td><td>Size[Default/Compact]</td></tr>
+    <tr><td><strong>Card entity</strong></td><td>Data Visualization</td><td>9</td><td>Layout · State · Footer</td></tr>
+    <tr><td><strong>cell-list-item</strong></td><td>Data Visualization</td><td>96</td><td>Type · Status · Behaviour · Selected</td></tr>
+    <tr><td><strong>cell-head-item</strong></td><td>Data Visualization</td><td>48</td><td>Type · Status · Alignement · Beahaviuor · Selected</td></tr>
+  </tbody>
+</table>
+
+<div class="section-title" style="color:#86efac">Cosa è andato bene</div>
+<div class="notes-box" style="border-color:#166534;background:#052e16;margin-bottom:20px">
+  <strong>Copertura completa delle categorie</strong> — tutti e 6 i macro-gruppi del UI Kit ispezionati in una sessione singola.<br><br>
+  <strong>Chiavi verificate live</strong> — ogni <code>componentKey</code> è stato ottenuto da <code>search_design_system</code> e confermato via <code>importComponentSetByKeyAsync</code>, non da documentazione statica.<br><br>
+  <strong>Variant properties reali</strong> — <code>variantGroupProperties</code> ha restituito i nomi esatti delle proprietà e i valori ammessi, pronti per <code>setProperties</code>.<br><br>
+  <strong>Text node names reali</strong> — <code>findAll(n =&gt; n.type === 'TEXT')</code> ha rivelato i nomi dei nodi testo interni, necessari per <code>setText(instance, nodeName, value)</code>.
+</div>
+
+<div class="section-title" style="color:var(--warn)">⚠ Warning da tenere a mente</div>
+
+<div class="notes-box" style="border-color:var(--warn);background:#1a1200;margin-bottom:12px">
+  <strong style="color:var(--warn)">W1 — Typo nella proprietà <code>cell-head-item</code></strong><br>
+  La proprietà di comportamento nelle colonne di tabella si chiama <code>"Beahaviuor"</code> (non "Behaviour"). Il typo è nel DS originale — va usato così in <code>setProperties</code>, altrimenti la variante non viene trovata.
+</div>
+<div class="notes-box" style="border-color:var(--warn);background:#1a1200;margin-bottom:12px">
+  <strong style="color:var(--warn)">W2 — Component set separati per dispositivo</strong><br>
+  Accordion, Modal, Input OTP e Accordion Nested esistono come set distinti Desktop / Tablet+Mobile. Importare il set sbagliato per il breakpoint target produce layout errati. Regola: <strong>Desktop per #12, #12s, #8 — Tablet/Mobile per #8s, #4</strong>.
+</div>
+<div class="notes-box" style="border-color:var(--warn);background:#1a1200;margin-bottom:12px">
+  <strong style="color:var(--warn)">W3 — Badge status: proprietà <code>Background</code></strong><br>
+  Nelle tabelle usare sempre <code>Background: False</code> (variante "plain"). <code>Background: True</code> genera una surface colorata attorno al badge — visivamente sbagliato in contesti tabulari e su sfondi non neutri.
+</div>
+<div class="notes-box" style="border-color:var(--warn);background:#1a1200;margin-bottom:20px">
+  <strong style="color:var(--warn)">W4 — Gauge Progress vs ProgressBar</strong><br>
+  Il tipo <code>Progress</code> del Gauge è per valori su scala operativa (es. carico motore), NON per task completion. Per percentuali di completamento task usare <code>ProgressBar</code>. Errore frequente di mapping semantico.
+</div>
+
+<div class="section-title" style="color:#f87171">Problemi aperti</div>
+<div class="notes-box" style="border-color:#7f1d1d;background:#1a0000;margin-bottom:12px">
+  <strong style="color:#f87171">P1 — Textarea non trovata</strong><br>
+  Nessun risultato da <code>search_design_system</code> con query "Textarea". Il componente potrebbe avere un nome diverso nel UI Kit (es. "Text area", "Multiline input") oppure non essere pubblicato come component set. Da verificare prima di disegnare schermate con input multi-riga.
+</div>
+<div class="notes-box" style="border-color:#7f1d1d;background:#1a0000;margin-bottom:12px">
+  <strong style="color:#f87171">P2 — Skeleton non trovato</strong><br>
+  Nessun risultato per "Skeleton". Il pattern di loading placeholder è documentato in <code>memory/component-rules-summary.md</code> (Skeleton = content loading) ma non risulta pubblicato come component set ricercabile. Da verificare nel UI Kit direttamente.
+</div>
+<div class="notes-box" style="border-color:#7f1d1d;background:#1a0000;margin-bottom:20px">
+  <strong style="color:#f87171">P3 — Discrepanza chiave Button tra sessioni</strong><br>
+  La chiave Button usata nella sessione precedente (<code>1ac3df0b…</code>) differisce da quella ottenuta in questa sessione (<code>848e574b…</code>). Probabile causa: versioning della libreria o set rinominato. La chiave autoritativa è quella da <code>search_design_system</code> in sessione corrente: <code>848e574b87599d82ed1a34197527abbb875480ce</code>.
+</div>
+`,
+          screenshots: []
         }
       ]
     }
